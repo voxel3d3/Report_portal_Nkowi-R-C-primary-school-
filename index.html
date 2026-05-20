@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NKOWI BASIC SCHOOL - Automated Subject Ranking SBA</title>
+    <title>NKOWI BASIC SCHOOL - Master SBA & Ranking Suite</title>
     <style>
         :root {
             --primary-color: #0f172a;
@@ -68,11 +68,12 @@
             margin-bottom: 30px;
         }
         .table-wrapper { overflow-x: auto; margin-top: 15px; border: 1px solid var(--border-color); }
-        table { border-collapse: collapse; min-width: 5500px; } 
+        table { border-collapse: collapse; min-width: 5800px; } 
         th, td { border: 1px solid var(--border-color); padding: 6px; text-align: center; font-size: 12px; }
         th { background-color: #1e293b; color: white; position: sticky; top: 0; }
         
         .subject-header { border-left: 3px solid #0284c7; border-right: 3px solid #0284c7; background-color: #0369a1 !important; }
+        .summary-header { background-color: #dc2626 !important; border-left: 3px solid #b91c1c; }
         .sub-header { background-color: #e2e8f0; font-weight: bold; color: #0f172a; font-size: 10px; }
         
         .input-name { width: 200px; font-weight: bold; padding: 5px; border: 1px solid var(--border-color); }
@@ -81,7 +82,11 @@
         .calc-weight { font-weight: bold; background: #e0f2fe; color: #0369a1; }
         .calc-ex-weight { font-weight: bold; background: #fef08a; color: #854d0e; }
         .calc-grand { font-weight: bold; background: #eff6ff; color: #1e40af; }
-        .calc-pos { font-weight: bold; background: #faf5ff; color: #6b21a8; font-size: 13px; }
+        .calc-pos { font-weight: bold; background: #faf5ff; color: #6b21a8; font-size: 11px; }
+        
+        /* Master Summary Columns Formatting */
+        .calc-master-tot { font-weight: bold; background: #fee2e2; color: #991b1b; font-size: 13px; }
+        .calc-master-pos { font-weight: bold; background: #fef3c7; color: #92400e; font-size: 14px; }
         
         .action-btn { background: #10b981; padding: 6px 12px; font-size: 12px; border-radius: 4px; }
 
@@ -116,7 +121,7 @@
 
     <div id="login-screen">
         <h2>NKOWI BASIC SCHOOL</h2>
-        <p>10-Column Portal (Automated Position Ranking Engine)</p>
+        <p>10-Column Portal (Subject & Master Ranking Engine)</p>
         <input type="password" id="portal-password" placeholder="Enter System Password">
         <button onclick="checkPassword()">Open Sheet Matrix</button>
         <p id="login-error" style="color: red; margin-top: 10px; display: none;">Invalid Password.</p>
@@ -124,13 +129,13 @@
 
     <div id="portal-dashboard">
         <div class="header-banner">
-            <h1 style="margin: 0; font-size: 24px;">NKOWI BASIC SCHOOL - COMPREHENSIVE SBA SPREADSHEET</h1>
-            <p style="margin: 5px 0 0 0; opacity: 0.9;">Continuous Assessment Framework with Automatic Subject Position Ranking</p>
+            <h1 style="margin: 0; font-size: 24px;">NKOWI BASIC SCHOOL - COMPREHENSIVE TERMINAL SPREADSHEET</h1>
+            <p style="margin: 5px 0 0 0; opacity: 0.9;">Continuous Assessment System with Automatic Subject & Over-all Class Ranking</p>
         </div>
 
         <div class="sba-card">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <h3 style="margin: 0; font-size: 16px; color: #475569;">← Scroll horizontally to view all columns. Positions recalculate automatically! →</h3>
+                <h3 style="margin: 0; font-size: 16px; color: #475569;">← Scroll horizontally to see final totals and overall positions at the far right edge →</h3>
                 <button onclick="addNewRow()" style="background-color: var(--accent-color); padding: 10px 20px;">+ Add New Student Row</button>
             </div>
             
@@ -150,6 +155,8 @@
                             <th colspan="10" class="subject-header" style="background-color:#511378 !important;">Computing</th>
                             <th colspan="10" class="subject-header" style="background-color:#3f6212 !important;">Creative Arts</th>
                             
+                            <th colspan="2" class="summary-header">Terminal Summary</th>
+                            
                             <th rowspan="2" style="background: #0f172a;">Action</th>
                         </tr>
                         <tr>
@@ -161,6 +168,9 @@
                             <th class="sub-header">EX(15)</th><th class="sub-header">TST(15)</th><th class="sub-header">GRP(15)</th><th class="sub-header">PRJ(15)</th><th class="sub-header">TOT(60)</th><th class="sub-header">SBA(50)</th><th class="sub-header">EXM(100)</th><th class="sub-header">EX50%</th><th class="sub-header">TOT</th><th class="sub-header" style="background:#f3e8ff; color:#6b21a8;">POS</th>
                             <th class="sub-header">EX(15)</th><th class="sub-header">TST(15)</th><th class="sub-header">GRP(15)</th><th class="sub-header">PRJ(15)</th><th class="sub-header">TOT(60)</th><th class="sub-header">SBA(50)</th><th class="sub-header">EXM(100)</th><th class="sub-header">EX50%</th><th class="sub-header">TOT</th><th class="sub-header" style="background:#f3e8ff; color:#6b21a8;">POS</th>
                             <th class="sub-header">EX(15)</th><th class="sub-header">TST(15)</th><th class="sub-header">GRP(15)</th><th class="sub-header">PRJ(15)</th><th class="sub-header">TOT(60)</th><th class="sub-header">SBA(50)</th><th class="sub-header">EXM(100)</th><th class="sub-header">EX50%</th><th class="sub-header">TOT</th><th class="sub-header" style="background:#f3e8ff; color:#6b21a8;">POS</th>
+                            
+                            <th style="background: #fee2e2; color: #991b1b; font-weight: bold;">CLASS TOT(800)</th>
+                            <th style="background: #fef3c7; color: #92400e; font-weight: bold;">OVERALL POS</th>
                         </tr>
                     </thead>
                     <tbody id="sba-rows">
@@ -200,8 +210,12 @@
             </table>
 
             <div style="margin-top: 25px; line-height: 1.8; font-size: 14px;">
-                <div><strong>OVERALL AVERAGE:</strong> <span id="r-average" style="font-weight: bold; text-decoration: underline;"></span></div>
-                <div style="margin-top: 8px;"><strong>CONDUCT:</strong> <span id="r-conduct"></span></div>
+                <div style="display: flex; gap: 40px;">
+                    <div><strong>CLASS TOTAL:</strong> <span id="r-class-total" style="font-weight: bold; text-decoration: underline;"></span> / 800</div>
+                    <div><strong>OVERALL POSITION:</strong> <span id="r-class-position" style="font-weight: bold; text-decoration: underline; color: #b45309;"></span></div>
+                    <div><strong>OVERALL AVERAGE:</strong> <span id="r-average" style="font-weight: bold; text-decoration: underline;"></span></div>
+                </div>
+                <div style="margin-top: 12px;"><strong>CONDUCT:</strong> <span id="r-conduct"></span></div>
                 <div><strong>INTEREST:</strong> <span id="r-interest"></span></div>
                 <div style="margin-top: 15px; padding: 15px; border: 1px solid #000; background: #f8fafc;">
                     <strong>CLASS TEACHER'S REMARKS:</strong> <span id="r-remarks"></span>
@@ -222,7 +236,6 @@
         if(inputPass === "Nkowi2026") {
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('portal-dashboard').style.display = 'block';
-            // Pre-load a few empty student rows
             addNewRow(); addNewRow(); addNewRow(); addNewRow();
         } else {
             document.getElementById('login-error').style.display = 'block';
@@ -260,9 +273,21 @@
                 <input type="text" class="input-name" placeholder="Full Name">
             </td>
             ${subCellsHTML}
+            
+            <td id="master-total-${totalActiveRows}" class="calc-master-tot">0</td>
+            <td id="master-position-${totalActiveRows}" class="calc-master-pos">-</td>
+            
             <td><button class="action-btn" onclick="buildReportCardWindow(${totalActiveRows})">Report</button></td>
         `;
         targetBody.appendChild(rowNode);
+    }
+
+    function getRankSuffix(rankNum) {
+        let suffix = "th";
+        if (rankNum === 1) suffix = "st";
+        if (rankNum === 2) suffix = "nd";
+        if (rankNum === 3) suffix = "rd";
+        return rankNum + suffix;
     }
 
     function computeGESMatrix(totalScore) {
@@ -279,6 +304,7 @@
 
     function runRowCalculations(rowNum) {
         const contextRow = document.getElementById(`sba-row-${rowNum}`);
+        let calculatedMasterSum = 0;
         
         ALL_SUBJECTS.forEach(sub => {
             const exe = parseFloat(contextRow.querySelector(`.${sub}-exercise`).value) || 0;
@@ -291,6 +317,8 @@
             const calculatedSBA50 = raw60Sum > 0 ? Math.round((raw60Sum / 60) * 50) : 0;
             const calculatedExam50 = Math.round(rawExam / 2);
             const grandTotal = calculatedSBA50 + calculatedExam50;
+            
+            calculatedMasterSum += grandTotal;
 
             document.getElementById(`${sub}-tot60-${rowNum}`).innerText = raw60Sum;
             document.getElementById(`${sub}-sba50-${rowNum}`).innerText = calculatedSBA50;
@@ -298,47 +326,61 @@
             document.getElementById(`${sub}-tot100-${rowNum}`).innerText = grandTotal;
         });
 
-        // Whenever any mark transitions, instantly sweep the grid to calculate subject positions rank rankings
-        recalculateAllSubjectPositions();
+        // Write the aggregate master sum directly to the end tracking field
+        document.getElementById(`master-total-${rowNum}`).innerText = calculatedMasterSum;
+
+        // Instantly sweep row arrays to update both internal columns and terminal master positions
+        recalculateAllSpreadsheetPositions();
     }
 
-    function recalculateAllSubjectPositions() {
+    function recalculateAllSpreadsheetPositions() {
         const allRows = document.querySelectorAll(".student-data-row");
         
+        // 1. COMPUTE SUBJECT LEVEL POSITIONS
         ALL_SUBJECTS.forEach(sub => {
             let scoreList = [];
-            
-            // Collect active totals across the column matrix
             allRows.forEach(row => {
                 const rId = row.getAttribute("data-row-id");
                 const totalScore = parseFloat(document.getElementById(`${sub}-tot100-${rId}`).innerText) || 0;
                 scoreList.push({ id: rId, score: totalScore });
             });
 
-            // Sort descending order 
             scoreList.sort((a, b) => b.score - a.score);
 
-            // Compute positions handles ties elegantly
             let currentRank = 1;
             for (let i = 0; i < scoreList.length; i++) {
                 if (i > 0 && scoreList[i].score < scoreList[i - 1].score) {
                     currentRank = i + 1;
                 }
-                
-                // Format strings to add suffixes (e.g., 1st, 2nd, 3rd)
-                let suffix = "th";
-                if (currentRank === 1) suffix = "st";
-                if (currentRank === 2) suffix = "nd";
-                if (currentRank === 3) suffix = "rd";
-                
-                // Do not display rank positions if scores haven't been entered yet
                 if(scoreList[i].score === 0) {
                      document.getElementById(`${sub}-pos-${scoreList[i].id}`).innerText = "-";
                 } else {
-                     document.getElementById(`${sub}-pos-${scoreList[i].id}`).innerText = currentRank + suffix;
+                     document.getElementById(`${sub}-pos-${scoreList[i].id}`).innerText = getRankSuffix(currentRank);
                 }
             }
         });
+
+        // 2. COMPUTE CLASS LEVEL OVERALL TERMINAL POSITIONS
+        let masterSummaryList = [];
+        allRows.forEach(row => {
+            const rId = row.getAttribute("data-row-id");
+            const finalCumulativeSum = parseFloat(document.getElementById(`master-total-${rId}`).innerText) || 0;
+            masterSummaryList.push({ id: rId, aggregate: finalCumulativeSum });
+        });
+
+        masterSummaryList.sort((a, b) => b.aggregate - a.aggregate);
+
+        let overallRank = 1;
+        for (let j = 0; j < masterSummaryList.length; j++) {
+            if (j > 0 && masterSummaryList[j].aggregate < masterSummaryList[j - 1].aggregate) {
+                overallRank = j + 1;
+            }
+            if(masterSummaryList[j].aggregate === 0) {
+                document.getElementById(`master-position-${masterSummaryList[j].id}`).innerText = "-";
+            } else {
+                document.getElementById(`master-position-${masterSummaryList[j].id}`).innerText = getRankSuffix(overallRank);
+            }
+        }
     }
 
     function buildReportCardWindow(rowNum) {
@@ -355,6 +397,10 @@
 
         const targetTableBody = document.getElementById('report-table-body');
         targetTableBody.innerHTML = '';
+        
+        const printedMasterTotal = document.getElementById(`master-total-${rowNum}`).innerText;
+        const printedMasterPosition = document.getElementById(`master-position-${rowNum}`).innerText;
+        
         let dynamicSum = 0;
 
         ALL_SUBJECTS.forEach(sub => {
@@ -380,6 +426,10 @@
         });
 
         const generalMean = dynamicSum / ALL_SUBJECTS.length;
+        
+        // Link terminal data elements to report display profile overlays
+        document.getElementById('r-class-total').innerText = printedMasterTotal;
+        document.getElementById('r-class-position').innerText = printedMasterPosition;
         document.getElementById('r-average').innerText = generalMean.toFixed(2) + "%";
 
         let behavior = "Polite, obedient, and relates exceptionally well with peers.";
