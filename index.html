@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NKOWI R/C PRIMARY - SBA Portal</title>
+    <title>NKOWI BASIC SCHOOL - Standalone SBA Portal</title>
     <style>
         :root {
-            --primary-color: #1e293b;
-            --accent-color: #4f46e5;
-            --bg-color: #f8fafc;
+            --primary-color: #0f172a;
+            --accent-color: #2563eb;
+            --bg-color: #f1f5f9;
             --card-bg: #ffffff;
             --border-color: #cbd5e1;
         }
@@ -19,7 +19,7 @@
             padding: 20px;
             color: #334155;
         }
-        .container { max-width: 1300px; margin: 0 auto; }
+        .container { max-width: 1600px; margin: 0 auto; }
         
         /* Login Screen */
         #login-screen {
@@ -51,18 +51,17 @@
         }
         button:hover { opacity: 0.9; }
         
-        /* Dashboard Header */
+        /* Main Interface Layout */
         #portal-dashboard { display: none; }
         .header-banner {
             background: var(--primary-color);
             color: white;
-            padding: 20px;
+            padding: 25px;
             border-radius: 8px;
             margin-bottom: 20px;
             text-align: center;
         }
 
-        /* SBA Table Styles */
         .sba-card {
             background: var(--card-bg);
             padding: 20px;
@@ -72,32 +71,33 @@
             margin-bottom: 30px;
         }
         .table-wrapper { overflow-x: auto; margin-top: 15px; }
-        table { width: 100%; border-collapse: collapse; min-width: 1100px; }
+        table { width: 100%; border-collapse: collapse; min-width: 2200px; }
         th, td { border: 1px solid var(--border-color); padding: 8px; text-align: center; font-size: 13px; }
-        th { background-color: #334155; color: white; position: sticky; top: 0; }
-        .sub-header { background-color: #e2e8f0; font-weight: bold; color: #1e293b; }
+        th { background-color: #1e293b; color: white; position: sticky; top: 0; }
+        .sub-header { background-color: #e2e8f0; font-weight: bold; color: #0f172a; font-size: 11px; }
         
-        .input-name { width: 160px; font-weight: bold; padding: 4px; }
-        .input-mark { width: 50px; text-align: center; padding: 4px; margin: 0; }
-        .calc-total { font-weight: bold; background: #f1f5f9; }
-        .action-btn { background: #10b981; padding: 6px 12px; font-size: 12px; }
+        .input-name { width: 180px; font-weight: bold; padding: 6px; border: 1px solid var(--border-color); border-radius: 4px; }
+        .input-mark { width: 45px; text-align: center; padding: 6px; margin: 0; border: 1px solid var(--border-color); border-radius: 4px; }
+        .calc-total { font-weight: bold; background: #f8fafc; color: #1e3a8a; }
+        .action-btn { background: #10b981; padding: 6px 12px; font-size: 12px; border-radius: 4px; }
 
-        /* Report Card Output Layout */
+        /* Report Card Layout */
         #report-card-output {
             display: none;
             background: white;
             padding: 40px;
             border: 3px double #000;
-            max-width: 800px;
+            max-width: 850px;
             margin: 30px auto;
             color: #000;
         }
         .report-header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; }
-        .report-header h1 { margin: 0; font-size: 26px; }
-        .report-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
+        .report-header h1 { margin: 0; font-size: 28px; font-family: 'Times New Roman', Times, serif; }
+        .report-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; font-size: 14px; }
         .print-preview-table { min-width: 100%; }
-        .print-preview-table th { background: #000; color: #fff; }
-        .print-btn { background: #dc2626; width: 100%; padding: 15px; font-size: 16px; margin-top: 20px; }
+        .print-preview-table th { background: #000; color: #fff; padding: 10px; }
+        .print-preview-table td { padding: 10px; border: 1px solid #000; }
+        .print-btn { background: #dc2626; width: 100%; padding: 15px; font-size: 16px; margin-top: 20px; border-radius: 4px; }
 
         @media print {
             body * { visibility: hidden; }
@@ -112,23 +112,23 @@
 <div class="container">
 
     <div id="login-screen">
-        <h2>NKOWI R/C PRIMARY</h2>
-        <p>Enter password to access Terminal SBA Grading sheets.</p>
-        <input type="password" id="portal-password" placeholder="Enter Password">
-        <button onclick="checkPassword()">Open SBA Portal</button>
-        <p id="login-error" style="color: red; margin-top: 10px; display: none;">Invalid Password.</p>
+        <h2>NKOWI BASIC SCHOOL</h2>
+        <p>SBA Management System Portal</p>
+        <input type="password" id="portal-password" placeholder="Enter Portal Password">
+        <button onclick="checkPassword()">Log In</button>
+        <p id="login-error" style="color: red; margin-top: 10px; display: none;">Invalid System Password.</p>
     </div>
 
     <div id="portal-dashboard">
         <div class="header-banner">
-            <h1 style="margin: 0; font-size: 24px;">NKOWI R/C PRIMARY SCHOOL - TERMINAL SBA SHEET</h1>
-            <p style="margin: 5px 0 0 0; opacity: 0.9;">Class Input, Grading, and Report Card Automation Hub</p>
+            <h1 style="margin: 0; font-size: 26px; letter-spacing: 0.5px;">NKOWI BASIC SCHOOL - AUTOMATED SBA DATA SUITE</h1>
+            <p style="margin: 6px 0 0 0; opacity: 0.9; font-size: 15px;">Multi-Subject Terminal Marks Processor</p>
         </div>
 
         <div class="sba-card">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <h2 style="margin: 0; font-size: 18px;">Student Marks Entry Roster (Basic 5)</h2>
-                <button onclick="addNewRow()" style="background-color: var(--accent-color); padding: 8px 16px;">+ Add New Student Row</button>
+                <h3 style="margin: 0; font-size: 18px;">Class Mark Sheet Matrix (Basic 5)</h3>
+                <button onclick="addNewRow()" style="background-color: var(--accent-color); padding: 10px 20px;">+ Add Student Entry</button>
             </div>
             
             <div class="table-wrapper">
@@ -136,20 +136,26 @@
                     <thead>
                         <tr>
                             <th rowspan="2" style="width: 40px;">No.</th>
-                            <th rowspan="2">Student Full Name</th>
+                            <th rowspan="2">Student Name</th>
                             <th colspan="3">English Lang.</th>
                             <th colspan="3">Mathematics</th>
-                            <th colspan="3">Int. Science</th>
+                            <th colspan="3">Integrated Science</th>
                             <th colspan="3">R.M.E</th>
+                            <th colspan="3">Ghanaian Language</th>
+                            <th colspan="3">History</th>
                             <th colspan="3">Computing</th>
-                            <th rowspan="2">Actions</th>
+                            <th colspan="3">Creative Arts</th>
+                            <th rowspan="2">Reports</th>
                         </tr>
                         <tr>
-                            <th class="sub-header">Class (50)</th><th class="sub-header">Exam (50)</th><th class="sub-header">Total</th>
-                            <th class="sub-header">Class (50)</th><th class="sub-header">Exam (50)</th><th class="sub-header">Total</th>
-                            <th class="sub-header">Class (50)</th><th class="sub-header">Exam (50)</th><th class="sub-header">Total</th>
-                            <th class="sub-header">Class (50)</th><th class="sub-header">Exam (50)</th><th class="sub-header">Total</th>
-                            <th class="sub-header">Class (50)</th><th class="sub-header">Exam (50)</th><th class="sub-header">Total</th>
+                            <th class="sub-header">SBA(50)</th><th class="sub-header">EX(50)</th><th class="sub-header">TOT</th>
+                            <th class="sub-header">SBA(50)</th><th class="sub-header">EX(50)</th><th class="sub-header">TOT</th>
+                            <th class="sub-header">SBA(50)</th><th class="sub-header">EX(50)</th><th class="sub-header">TOT</th>
+                            <th class="sub-header">SBA(50)</th><th class="sub-header">EX(50)</th><th class="sub-header">TOT</th>
+                            <th class="sub-header">SBA(50)</th><th class="sub-header">EX(50)</th><th class="sub-header">TOT</th>
+                            <th class="sub-header">SBA(50)</th><th class="sub-header">EX(50)</th><th class="sub-header">TOT</th>
+                            <th class="sub-header">SBA(50)</th><th class="sub-header">EX(50)</th><th class="sub-header">TOT</th>
+                            <th class="sub-header">SBA(50)</th><th class="sub-header">EX(50)</th><th class="sub-header">TOT</th>
                         </tr>
                     </thead>
                     <tbody id="sba-rows">
@@ -160,13 +166,13 @@
 
         <div id="report-card-output">
             <div class="report-header">
-                <h1>NKOWI R/C PRIMARY SCHOOL</h1>
-                <p style="margin: 5px 0; font-weight: bold; letter-spacing: 1px;">KNOWLEDGE IS POWER</p>
-                <p style="margin: 0; font-size: 14px;">P.O. BOX 8, KUNTANASE - ASHANTI REGION</p>
+                <h1>NKOWI BASIC SCHOOL</h1>
+                <p style="margin: 5px 0; font-weight: bold; letter-spacing: 1.5px; font-size: 14px;">KNOWLEDGE IS POWER</p>
+                <p style="margin: 0; font-size: 13px; font-style: italic;">P.O. BOX 8, KUNTANASE - ASHANTI REGION</p>
             </div>
             
             <div class="report-info-grid">
-                <div><strong>STUDENT NAME:</strong> <span id="r-name"></span></div>
+                <div><strong>NAME OF STUDENT:</strong> <span id="r-name"></span></div>
                 <div><strong>CLASS:</strong> BASIC 5</div>
                 <div><strong>ACADEMIC YEAR:</strong> 2025/2026</div>
                 <div><strong>TERM:</strong> THIRD TERM</div>
@@ -175,8 +181,8 @@
             <table class="print-preview-table">
                 <thead>
                     <tr>
-                        <th>SUBJECT</th>
-                        <th>CLASS SCORE (50%)</th>
+                        <th style="text-align: left;">SUBJECT</th>
+                        <th>SBA SCORE (50%)</th>
                         <th>EXAM SCORE (50%)</th>
                         <th>TOTAL (100%)</th>
                         <th>GRADE</th>
@@ -189,28 +195,28 @@
 
             <div style="margin-top: 25px; line-height: 1.8; font-size: 14px;">
                 <div><strong>OVERALL AVERAGE:</strong> <span id="r-average" style="font-weight: bold; text-decoration: underline;"></span></div>
-                <div style="margin-top: 10px;"><strong>CONDUCT:</strong> <span id="r-conduct"></span></div>
+                <div style="margin-top: 8px;"><strong>CONDUCT:</strong> <span id="r-conduct"></span></div>
                 <div><strong>INTEREST:</strong> <span id="r-interest"></span></div>
-                <div style="margin-top: 12px; padding: 12px; border: 1px solid #000; background: #fafafa;">
+                <div style="margin-top: 15px; padding: 15px; border: 1px solid #000; background: #f8fafc;">
                     <strong>CLASS TEACHER'S REMARKS:</strong> <span id="r-remarks"></span>
                 </div>
             </div>
             
-            <button class="print-btn" onclick="window.print()">Print This Student's Report Card</button>
+            <button class="print-btn" onclick="window.print()">Print Report Card</button>
         </div>
     </div>
 </div>
 
 <script>
-    const SUBJECT_COUNT = 5;
-    let studentCount = 0;
+    const ALL_SUBJECTS = ['eng', 'math', 'sci', 'rme', 'gha', 'his', 'comp', 'crt'];
+    let totalActiveRows = 0;
 
     function checkPassword() {
-        const pass = document.getElementById('portal-password').value;
-        if(pass === "Nkowi2026") {
+        const inputPass = document.getElementById('portal-password').value;
+        if(inputPass === "Nkowi2026") {
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('portal-dashboard').style.display = 'block';
-            // Start with 3 default blank rows just like an open sheet
+            // Setup base empty table slots
             addNewRow(); addNewRow(); addNewRow();
         } else {
             document.getElementById('login-error').style.display = 'block';
@@ -218,125 +224,112 @@
     }
 
     function addNewRow() {
-        studentCount++;
-        const tbody = document.getElementById('sba-rows');
-        const tr = document.createElement('tr');
-        tr.id = `student-row-${studentCount}`;
+        totalActiveRows++;
+        const targetBody = document.getElementById('sba-rows');
+        const rowNode = document.createElement('tr');
+        rowNode.id = `sba-row-${totalActiveRows}`;
         
-        tr.innerHTML = `
-            <td>${studentCount}</td>
-            <td><input type="text" class="input-name" placeholder="Student Name"></td>
-            
-            <td><input type="number" class="input-mark eng-class" max="50" oninput="calcStudentTotal(${studentCount})"></td>
-            <td><input type="number" class="input-mark eng-exam" max="50" oninput="calcStudentTotal(${studentCount})"></td>
-            <td id="eng-total-${studentCount}" class="calc-total">0</td>
-            
-            <td><input type="number" class="input-mark math-class" max="50" oninput="calcStudentTotal(${studentCount})"></td>
-            <td><input type="number" class="input-mark math-exam" max="50" oninput="calcStudentTotal(${studentCount})"></td>
-            <td id="math-total-${studentCount}" class="calc-total">0</td>
-            
-            <td><input type="number" class="input-mark sci-class" max="50" oninput="calcStudentTotal(${studentCount})"></td>
-            <td><input type="number" class="input-mark sci-exam" max="50" oninput="calcStudentTotal(${studentCount})"></td>
-            <td id="sci-total-${studentCount}" class="calc-total">0</td>
-            
-            <td><input type="number" class="input-mark rme-class" max="50" oninput="calcStudentTotal(${studentCount})"></td>
-            <td><input type="number" class="input-mark rme-exam" max="50" oninput="calcStudentTotal(${studentCount})"></td>
-            <td id="rme-total-${studentCount}" class="calc-total">0</td>
-            
-            <td><input type="number" class="input-mark comp-class" max="50" oninput="calcStudentTotal(${studentCount})"></td>
-            <td><input type="number" class="input-mark comp-exam" max="50" oninput="calcStudentTotal(${studentCount})"></td>
-            <td id="comp-total-${studentCount}" class="calc-total">0</td>
-            
-            <td><button class="action-btn" onclick="generateSingleReport(${studentCount})">View Report</button></td>
+        let subCellsHTML = '';
+        ALL_SUBJECTS.forEach(sub => {
+            subCellsHTML += `
+                <td><input type="number" class="input-mark ${sub}-class" max="50" oninput="runRowCalculations(${totalActiveRows})"></td>
+                <td><input type="number" class="input-mark ${sub}-exam" max="50" oninput="runRowCalculations(${totalActiveRows})"></td>
+                <td id="${sub}-total-${totalActiveRows}" class="calc-total">0</td>
+            `;
+        });
+
+        rowNode.innerHTML = `
+            <td>${totalActiveRows}</td>
+            <td><input type="text" class="input-name" placeholder="Enter Full Name"></td>
+            ${subCellsHTML}
+            <td><button class="action-btn" onclick="buildReportCardWindow(${totalActiveRows})">Generate</button></td>
         `;
-        tbody.appendChild(tr);
+        targetBody.appendChild(rowNode);
     }
 
-    function calcStudentTotal(rowId) {
-        const row = document.getElementById(`student-row-${rowId}`);
-        const subjects = ['eng', 'math', 'sci', 'rme', 'comp'];
-        
-        subjects.forEach(sub => {
-            const classVal = parseFloat(row.querySelector(`.${sub}-class`).value) || 0;
-            const examVal = parseFloat(row.querySelector(`.${sub}-exam`).value) || 0;
-            document.getElementById(`${sub}-total-${rowId}`).innerText = classVal + examVal;
+    function runRowCalculations(rowNum) {
+        const contextRow = document.getElementById(`sba-row-${rowNum}`);
+        ALL_SUBJECTS.forEach(sub => {
+            const classScore = parseFloat(contextRow.querySelector(`.${sub}-class`).value) || 0;
+            const examScore = parseFloat(contextRow.querySelector(`.${sub}-exam`).value) || 0;
+            document.getElementById(`${sub}-total-${rowNum}`).innerText = (classScore + examScore);
         });
     }
 
-    function getGESAssessment(total) {
-        if(total >= 80) return { grade: 1, remark: "Excellent" };
-        if(total >= 75) return { grade: 2, remark: "Very Good" };
-        if(total >= 70) return { grade: 3, remark: "Good" };
-        if(total >= 65) return { grade: 4, remark: "High Average" };
-        if(total >= 60) return { grade: 5, remark: "Average" };
-        if(total >= 55) return { grade: 6, remark: "Low Average" };
-        if(total >= 50) return { grade: 7, remark: "Credit" };
-        if(total >= 40) return { grade: 8, remark: "Pass" };
-        return { grade: 9, remark: "Fail" };
+    function computeGESMatrix(totalScore) {
+        if(totalScore >= 80) return { gr: 1, rem: "Excellent" };
+        if(totalScore >= 75) return { gr: 2, rem: "Very Good" };
+        if(totalScore >= 70) return { gr: 3, rem: "Good" };
+        if(totalScore >= 65) return { gr: 4, rem: "High Average" };
+        if(totalScore >= 60) return { gr: 5, rem: "Average" };
+        if(totalScore >= 55) return { gr: 6, rem: "Low Average" };
+        if(totalScore >= 50) return { gr: 7, rem: "Credit" };
+        if(totalScore >= 40) return { gr: 8, rem: "Pass" };
+        return { gr: 9, rem: "Fail" };
     }
 
-    function generateSingleReport(rowId) {
-        const row = document.getElementById(`student-row-${rowId}`);
-        const name = row.querySelector('.input-name').value || "UNKNOWN STUDENT";
+    function buildReportCardWindow(rowNum) {
+        const contextRow = document.getElementById(`sba-row-${rowNum}`);
+        const studentRawName = contextRow.querySelector('.input-name').value || "STUDENT RECORD ENTRY";
         
-        document.getElementById('r-name').innerText = name.toUpperCase();
+        document.getElementById('r-name').innerText = studentRawName.toUpperCase();
         
-        const subjectsList = [
-            { label: "ENGLISH LANGUAGE", key: "eng" },
-            { label: "MATHEMATICS", key: "math" },
-            { label: "INTEGRATED SCIENCE", key: "sci" },
-            { label: "R.M.E", key: "rme" },
-            { label: "COMPUTING", key: "comp" }
-        ];
+        const labelsMap = {
+            'eng': 'ENGLISH LANGUAGE', 'math': 'MATHEMATICS', 'sci': 'INTEGRATED SCIENCE',
+            'rme': 'RELIGIOUS & MORAL EDUC. (R.M.E)', 'gha': 'GHANAIAN LANGUAGE',
+            'his': 'HISTORY', 'comp': 'COMPUTING', 'crt': 'CREATIVE ARTS'
+        };
 
-        const reportBody = document.getElementById('report-table-body');
-        reportBody.innerHTML = '';
-        let grandTotal = 0;
+        const targetTableBody = document.getElementById('report-table-body');
+        targetTableBody.innerHTML = '';
+        let dynamicSum = 0;
 
-        subjectsList.forEach(sub => {
-            const classVal = parseFloat(row.querySelector(`.${sub.key}-class`).value) || 0;
-            const examVal = parseFloat(row.querySelector(`.${sub.key}-exam`).value) || 0;
-            const total = classVal + examVal;
-            grandTotal += total;
+        ALL_SUBJECTS.forEach(sub => {
+            const clsVal = parseFloat(contextRow.querySelector(`.${sub}-class`).value) || 0;
+            const exVal = parseFloat(contextRow.querySelector(`.${sub}-exam`).value) || 0;
+            const computedTotal = clsVal + exVal;
+            dynamicSum += computedTotal;
 
-            const assessment = getGESAssessment(total);
+            const assessment = computeGESMatrix(computedTotal);
 
-            reportBody.innerHTML += `
+            targetTableBody.innerHTML += `
                 <tr>
-                    <td style="text-align: left; font-weight: bold; padding-left: 15px;">${sub.label}</td>
-                    <td>${classVal}</td>
-                    <td>${examVal}</td>
-                    <td style="font-weight: bold;">${total}</td>
-                    <td>${assessment.grade}</td>
-                    <td>${assessment.remark}</td>
+                    <td style="text-align: left; font-weight: bold;">${labelsMap[sub]}</td>
+                    <td>${clsVal}</td>
+                    <td>${exVal}</td>
+                    <td style="font-weight: bold; color: #1e3a8a;">${computedTotal}</td>
+                    <td style="font-weight: bold;">${assessment.gr}</td>
+                    <td>${assessment.rem}</td>
                 </tr>
             `;
         });
 
-        const finalAverage = grandTotal / SUBJECT_COUNT;
-        document.getElementById('r-average').innerText = finalAverage.toFixed(2) + "%";
+        const generalMean = dynamicSum / ALL_SUBJECTS.length;
+        document.getElementById('r-average').innerText = generalMean.toFixed(2) + "%";
 
-        // Dynamic Text Output Core Engines
-        let conduct = "Good. Displays obedience and cooperates fully with teachers.";
-        if(finalAverage >= 75) conduct = "Exemplary behavior. Sets a wonderful example for peers.";
-        else if(finalAverage < 50) conduct = "Satisfactory. Needs to eliminate distractions and build focus.";
+        // Logic Matrix for automated comments
+        let behavior = "Polite, obedient, and relates exceptionally well with peers.";
+        let hobbyFocus = "Shows profound interest in technology exploration and leadership activities.";
+        let masterSummary = "An outstanding performance. Keep up the high academic standard.";
 
-        let interest = "Sports, reading and hands-on environmental activities.";
-        if(finalAverage >= 80) interest = "Academic exploration, computing algorithms, and logic games.";
-        else if(finalAverage < 50) interest = "Practical arts and recreational teamwork games.";
+        if(generalMean < 75) {
+            behavior = "Good behavior. Attentive in class and works well within teams.";
+            hobbyFocus = "Enjoys reading, group discussions, and creative design assignments.";
+            masterSummary = "A commendable terminal performance. Maintain focus to achieve even better grades.";
+        }
+        if(generalMean < 50) {
+            behavior = "Quiet, but needs to be more interactive and attentive during class instructions.";
+            hobbyFocus = "Recreational games and practical learning exercises.";
+            masterSummary = "Performance is quite weak. Needs intense home support and consistent remedial studies.";
+        }
 
-        let remarks = "A satisfactory progress. With determined effort, higher goals can be achieved.";
-        if(finalAverage >= 80) remarks = "An exceptional performance! Keep maintaining this brilliant standard.";
-        else if(finalAverage >= 70) remarks = "Very good terminal performance. Keep working hard.";
-        else if(finalAverage < 50) remarks = "Performance is weak. Regular remedial study is highly recommended.";
+        document.getElementById('r-conduct').innerText = behavior;
+        document.getElementById('r-interest').innerText = hobbyFocus;
+        document.getElementById('r-remarks').innerText = masterSummary;
 
-        document.getElementById('r-conduct').innerText = conduct;
-        document.getElementById('r-interest').innerText = interest;
-        document.getElementById('r-remarks').innerText = remarks;
-
-        const outputWindow = document.getElementById('report-card-output');
-        outputWindow.style.display = 'block';
-        outputWindow.scrollIntoView({ behavior: 'smooth' });
+        const reportSection = document.getElementById('report-card-output');
+        reportSection.style.display = 'block';
+        reportSection.scrollIntoView({ behavior: 'smooth' });
     }
 </script>
 
