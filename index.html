@@ -3,40 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Automated Student Report Portal</title>
+    <title>NKOWI R/C PRIMARY - SBA Portal</title>
     <style>
         :root {
-            --primary-color: #1a1a1a;
+            --primary-color: #1e293b;
             --accent-color: #4f46e5;
-            --bg-color: #f3f4f6;
+            --bg-color: #f8fafc;
             --card-bg: #ffffff;
+            --border-color: #cbd5e1;
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-color);
             margin: 0;
             padding: 20px;
-            color: #333;
+            color: #334155;
         }
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-        /* Login Screen Styles */
+        .container { max-width: 1300px; margin: 0 auto; }
+        
+        /* Login Screen */
         #login-screen {
             max-width: 400px;
             margin: 100px auto;
             background: var(--card-bg);
             padding: 30px;
             border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             text-align: center;
+            border: 1px solid var(--border-color);
         }
-        input[type="password"], input[type="text"], input[type="number"], select {
+        input[type="password"], input[type="text"], input[type="number"] {
             width: 100%;
             padding: 10px;
             margin: 10px 0 20px 0;
-            border: 1px solid #ccc;
+            border: 1px solid var(--border-color);
             border-radius: 4px;
             box-sizing: border-box;
         }
@@ -48,47 +48,62 @@
             border-radius: 4px;
             cursor: pointer;
             font-weight: bold;
-            width: 100%;
         }
         button:hover { opacity: 0.9; }
         
-        /* Dashboard & Form Styles */
+        /* Dashboard Header */
         #portal-dashboard { display: none; }
-        .card {
-            background: var(--card-bg);
-            padding: 25px;
+        .header-banner {
+            background: var(--primary-color);
+            color: white;
+            padding: 20px;
             border-radius: 8px;
             margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
             text-align: center;
         }
-        th { background-color: var(--primary-color); color: white; }
-        .score-input { width: 70px; text-align: center; margin: 0; padding: 5px; }
 
-        /* Report Card Print Layout */
+        /* SBA Table Styles */
+        .sba-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            border: 1px solid var(--border-color);
+            margin-bottom: 30px;
+        }
+        .table-wrapper { overflow-x: auto; margin-top: 15px; }
+        table { width: 100%; border-collapse: collapse; min-width: 1100px; }
+        th, td { border: 1px solid var(--border-color); padding: 8px; text-align: center; font-size: 13px; }
+        th { background-color: #334155; color: white; position: sticky; top: 0; }
+        .sub-header { background-color: #e2e8f0; font-weight: bold; color: #1e293b; }
+        
+        .input-name { width: 160px; font-weight: bold; padding: 4px; }
+        .input-mark { width: 50px; text-align: center; padding: 4px; margin: 0; }
+        .calc-total { font-weight: bold; background: #f1f5f9; }
+        .action-btn { background: #10b981; padding: 6px 12px; font-size: 12px; }
+
+        /* Report Card Output Layout */
         #report-card-output {
             display: none;
             background: white;
             padding: 40px;
             border: 3px double #000;
-            margin-top: 30px;
+            max-width: 800px;
+            margin: 30px auto;
+            color: #000;
         }
         .report-header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; }
-        
+        .report-header h1 { margin: 0; font-size: 26px; }
+        .report-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
+        .print-preview-table { min-width: 100%; }
+        .print-preview-table th { background: #000; color: #fff; }
+        .print-btn { background: #dc2626; width: 100%; padding: 15px; font-size: 16px; margin-top: 20px; }
+
         @media print {
             body * { visibility: hidden; }
             #report-card-output, #report-card-output * { visibility: visible; }
-            #report-card-output { position: absolute; left: 0; top: 0; width: 100%; border: none; }
+            #report-card-output { position: absolute; left: 0; top: 0; width: 100%; border: none; padding: 0; }
+            .print-btn { display: none; }
         }
     </style>
 </head>
@@ -97,110 +112,158 @@
 <div class="container">
 
     <div id="login-screen">
-        <h2>School Portal Login</h2>
-        <p>Enter administrative password to access grading sheets.</p>
+        <h2>NKOWI R/C PRIMARY</h2>
+        <p>Enter password to access Terminal SBA Grading sheets.</p>
         <input type="password" id="portal-password" placeholder="Enter Password">
-        <button onclick="checkPassword()">Login to Portal</button>
-        <p id="login-error" style="color: red; margin-top: 10px; display: none;">Invalid Password. Try again.</p>
+        <button onclick="checkPassword()">Open SBA Portal</button>
+        <p id="login-error" style="color: red; margin-top: 10px; display: none;">Invalid Password.</p>
     </div>
 
     <div id="portal-dashboard">
-        <div class="card">
-            <h2>Student Administration & Demographics</h2>
-            <div class="grid-2">
-                <div>
-                    <label>Student Full Name:</label>
-                    <input type="text" id="student-name" placeholder="e.g. King">
-                </div>
-                <div>
-                    <label>Class:</label>
-                    <input type="text" id="student-class" value="Basic 5">
-                </div>
-            </div>
+        <div class="header-banner">
+            <h1 style="margin: 0; font-size: 24px;">NKOWI R/C PRIMARY SCHOOL - TERMINAL SBA SHEET</h1>
+            <p style="margin: 5px 0 0 0; opacity: 0.9;">Class Input, Grading, and Report Card Automation Hub</p>
         </div>
 
-        <div class="card">
-            <h2>Academic Marks Entry (50% Class / 50% Exam)</h2>
-            <table id="marks-table">
-                <thead>
-                    <tr>
-                        <th>Subject</th>
-                        <th>Class Score (Max 50)</th>
-                        <th>Exam Score (Max 50)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>English Language</td><td><input type="number" class="score-input class-mark" max="50" min="0"></td><td><input type="number" class="score-input exam-mark" max="50" min="0"></td></tr>
-                    <tr><td>Mathematics</td><td><input type="number" class="score-input class-mark" max="50" min="0"></td><td><input type="number" class="score-input exam-mark" max="50" min="0"></td></tr>
-                    <tr><td>Integrated Science</td><td><input type="number" class="score-input class-mark" max="50" min="0"></td><td><input type="number" class="score-input exam-mark" max="50" min="0"></td></tr>
-                    <tr><td>R.M.E</td><td><input type="number" class="score-input class-mark" max="50" min="0"></td><td><input type="number" class="score-input exam-mark" max="50" min="0"></td></tr>
-                    <tr><td>Computing</td><td><input type="number" class="score-input class-mark" max="50" min="0"></td><td><input type="number" class="score-input exam-mark" max="50" min="0"></td></tr>
-                    <tr><td>History</td><td><input type="number" class="score-input class-mark" max="50" min="0"></td><td><input type="number" class="score-input exam-mark" max="50" min="0"></td></tr>
-                    <tr><td>Ghanaian Language</td><td><input type="number" class="score-input class-mark" max="50" min="0"></td><td><input type="number" class="score-input exam-mark" max="50" min="0"></td></tr>
-                    <tr><td>Creative Arts</td><td><input type="number" class="score-input class-mark" max="50" min="0"></td><td><input type="number" class="score-input exam-mark" max="50" min="0"></td></tr>
-                </tbody>
-            </table>
-            <br>
-            <button onclick="generateReport()">Calculate Scores & Generate Report</button>
-        </div>
-
-        <div id="report-card-output" class="card">
-            <div class="report-header">
-                <h1 style="margin: 0;">NKOWI R/C PRIMARY SCHOOL</h1>
-                <p style="margin: 5px 0; font-weight: bold; letter-spacing: 1px;">KNOWLEDGE IS POWER</p>
-                <p style="margin: 0;">P.O. BOX 8, KUNTANASE - ASHANTI REGION</p>
+        <div class="sba-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h2 style="margin: 0; font-size: 18px;">Student Marks Entry Roster (Basic 5)</h2>
+                <button onclick="addNewRow()" style="background-color: var(--accent-color); padding: 8px 16px;">+ Add New Student Row</button>
             </div>
             
-            <div style="margin: 20px 0; display: grid; grid-template-columns: 1fr 1fr; line-height: 1.8;">
+            <div class="table-wrapper">
+                <table id="sba-table">
+                    <thead>
+                        <tr>
+                            <th rowspan="2" style="width: 40px;">No.</th>
+                            <th rowspan="2">Student Full Name</th>
+                            <th colspan="3">English Lang.</th>
+                            <th colspan="3">Mathematics</th>
+                            <th colspan="3">Int. Science</th>
+                            <th colspan="3">R.M.E</th>
+                            <th colspan="3">Computing</th>
+                            <th rowspan="2">Actions</th>
+                        </tr>
+                        <tr>
+                            <th class="sub-header">Class (50)</th><th class="sub-header">Exam (50)</th><th class="sub-header">Total</th>
+                            <th class="sub-header">Class (50)</th><th class="sub-header">Exam (50)</th><th class="sub-header">Total</th>
+                            <th class="sub-header">Class (50)</th><th class="sub-header">Exam (50)</th><th class="sub-header">Total</th>
+                            <th class="sub-header">Class (50)</th><th class="sub-header">Exam (50)</th><th class="sub-header">Total</th>
+                            <th class="sub-header">Class (50)</th><th class="sub-header">Exam (50)</th><th class="sub-header">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sba-rows">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="report-card-output">
+            <div class="report-header">
+                <h1>NKOWI R/C PRIMARY SCHOOL</h1>
+                <p style="margin: 5px 0; font-weight: bold; letter-spacing: 1px;">KNOWLEDGE IS POWER</p>
+                <p style="margin: 0; font-size: 14px;">P.O. BOX 8, KUNTANASE - ASHANTI REGION</p>
+            </div>
+            
+            <div class="report-info-grid">
                 <div><strong>STUDENT NAME:</strong> <span id="r-name"></span></div>
-                <div><strong>CLASS:</strong> <span id="r-class"></span></div>
+                <div><strong>CLASS:</strong> BASIC 5</div>
+                <div><strong>ACADEMIC YEAR:</strong> 2025/2026</div>
+                <div><strong>TERM:</strong> THIRD TERM</div>
             </div>
 
-            <table>
+            <table class="print-preview-table">
                 <thead>
                     <tr>
-                        <th>Subject</th>
-                        <th>Class (50%)</th>
-                        <th>Exam (50%)</th>
-                        <th>Total (100%)</th>
-                        <th>Grade</th>
-                        <th>Remarks</th>
+                        <th>SUBJECT</th>
+                        <th>CLASS SCORE (50%)</th>
+                        <th>EXAM SCORE (50%)</th>
+                        <th>TOTAL (100%)</th>
+                        <th>GRADE</th>
+                        <th>REMARKS</th>
                     </tr>
                 </thead>
                 <tbody id="report-table-body">
                     </tbody>
             </table>
 
-            <div style="margin-top: 20px; line-height: 2;">
-                <div><strong>OVERALL AVERAGE:</strong> <span id="r-average" style="font-weight: bold;"></span></div>
-                <hr>
-                <div><strong>CONDUCT:</strong> <span id="r-conduct"></span></div>
+            <div style="margin-top: 25px; line-height: 1.8; font-size: 14px;">
+                <div><strong>OVERALL AVERAGE:</strong> <span id="r-average" style="font-weight: bold; text-decoration: underline;"></span></div>
+                <div style="margin-top: 10px;"><strong>CONDUCT:</strong> <span id="r-conduct"></span></div>
                 <div><strong>INTEREST:</strong> <span id="r-interest"></span></div>
-                <div style="margin-top: 10px; padding: 10px; border: 1px solid #ccc; background: #fafafa;">
+                <div style="margin-top: 12px; padding: 12px; border: 1px solid #000; background: #fafafa;">
                     <strong>CLASS TEACHER'S REMARKS:</strong> <span id="r-remarks"></span>
                 </div>
             </div>
-            <br>
-            <button onclick="window.print()" style="background-color: #10b981;">Print / Save Report Card as PDF</button>
+            
+            <button class="print-btn" onclick="window.print()">Print This Student's Report Card</button>
         </div>
     </div>
-
 </div>
 
 <script>
-    // System Password Gate
+    const SUBJECT_COUNT = 5;
+    let studentCount = 0;
+
     function checkPassword() {
         const pass = document.getElementById('portal-password').value;
-        if(pass === "Nkowi2026") { // Set your preferred teacher password here
+        if(pass === "Nkowi2026") {
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('portal-dashboard').style.display = 'block';
+            // Start with 3 default blank rows just like an open sheet
+            addNewRow(); addNewRow(); addNewRow();
         } else {
             document.getElementById('login-error').style.display = 'block';
         }
     }
 
-    // GES Standard Grading Logic
-    function getGradeAndRemark(total) {
+    function addNewRow() {
+        studentCount++;
+        const tbody = document.getElementById('sba-rows');
+        const tr = document.createElement('tr');
+        tr.id = `student-row-${studentCount}`;
+        
+        tr.innerHTML = `
+            <td>${studentCount}</td>
+            <td><input type="text" class="input-name" placeholder="Student Name"></td>
+            
+            <td><input type="number" class="input-mark eng-class" max="50" oninput="calcStudentTotal(${studentCount})"></td>
+            <td><input type="number" class="input-mark eng-exam" max="50" oninput="calcStudentTotal(${studentCount})"></td>
+            <td id="eng-total-${studentCount}" class="calc-total">0</td>
+            
+            <td><input type="number" class="input-mark math-class" max="50" oninput="calcStudentTotal(${studentCount})"></td>
+            <td><input type="number" class="input-mark math-exam" max="50" oninput="calcStudentTotal(${studentCount})"></td>
+            <td id="math-total-${studentCount}" class="calc-total">0</td>
+            
+            <td><input type="number" class="input-mark sci-class" max="50" oninput="calcStudentTotal(${studentCount})"></td>
+            <td><input type="number" class="input-mark sci-exam" max="50" oninput="calcStudentTotal(${studentCount})"></td>
+            <td id="sci-total-${studentCount}" class="calc-total">0</td>
+            
+            <td><input type="number" class="input-mark rme-class" max="50" oninput="calcStudentTotal(${studentCount})"></td>
+            <td><input type="number" class="input-mark rme-exam" max="50" oninput="calcStudentTotal(${studentCount})"></td>
+            <td id="rme-total-${studentCount}" class="calc-total">0</td>
+            
+            <td><input type="number" class="input-mark comp-class" max="50" oninput="calcStudentTotal(${studentCount})"></td>
+            <td><input type="number" class="input-mark comp-exam" max="50" oninput="calcStudentTotal(${studentCount})"></td>
+            <td id="comp-total-${studentCount}" class="calc-total">0</td>
+            
+            <td><button class="action-btn" onclick="generateSingleReport(${studentCount})">View Report</button></td>
+        `;
+        tbody.appendChild(tr);
+    }
+
+    function calcStudentTotal(rowId) {
+        const row = document.getElementById(`student-row-${rowId}`);
+        const subjects = ['eng', 'math', 'sci', 'rme', 'comp'];
+        
+        subjects.forEach(sub => {
+            const classVal = parseFloat(row.querySelector(`.${sub}-class`).value) || 0;
+            const examVal = parseFloat(row.querySelector(`.${sub}-exam`).value) || 0;
+            document.getElementById(`${sub}-total-${rowId}`).innerText = classVal + examVal;
+        });
+    }
+
+    function getGESAssessment(total) {
         if(total >= 80) return { grade: 1, remark: "Excellent" };
         if(total >= 75) return { grade: 2, remark: "Very Good" };
         if(total >= 70) return { grade: 3, remark: "Good" };
@@ -212,36 +275,37 @@
         return { grade: 9, remark: "Fail" };
     }
 
-    function generateReport() {
-        const name = document.getElementById('student-name').value || "N/A";
-        const sClass = document.getElementById('student-class').value || "N/A";
+    function generateSingleReport(rowId) {
+        const row = document.getElementById(`student-row-${rowId}`);
+        const name = row.querySelector('.input-name').value || "UNKNOWN STUDENT";
         
         document.getElementById('r-name').innerText = name.toUpperCase();
-        document.getElementById('r-class').innerText = sClass.toUpperCase();
+        
+        const subjectsList = [
+            { label: "ENGLISH LANGUAGE", key: "eng" },
+            { label: "MATHEMATICS", key: "math" },
+            { label: "INTEGRATED SCIENCE", key: "sci" },
+            { label: "R.M.E", key: "rme" },
+            { label: "COMPUTING", key: "comp" }
+        ];
 
-        const tableRows = document.querySelectorAll('#marks-table tbody tr');
         const reportBody = document.getElementById('report-table-body');
         reportBody.innerHTML = '';
+        let grandTotal = 0;
 
-        let totalScoreSum = 0;
-        let validSubjectsCount = 0;
+        subjectsList.forEach(sub => {
+            const classVal = parseFloat(row.querySelector(`.${sub.key}-class`).value) || 0;
+            const examVal = parseFloat(row.querySelector(`.${sub.key}-exam`).value) || 0;
+            const total = classVal + examVal;
+            grandTotal += total;
 
-        tableRows.forEach(row => {
-            const subjectName = row.cells[0].innerText;
-            const classMark = parseFloat(row.querySelector('.class-mark').value) || 0;
-            const examMark = parseFloat(row.querySelector('.exam-mark').value) || 0;
-            const total = classMark + examMark;
-
-            totalScoreSum += total;
-            validSubjectsCount++;
-
-            const assessment = getGradeAndRemark(total);
+            const assessment = getGESAssessment(total);
 
             reportBody.innerHTML += `
                 <tr>
-                    <td style="text-align: left; font-weight: bold;">${subjectName}</td>
-                    <td>${classMark}</td>
-                    <td>${examMark}</td>
+                    <td style="text-align: left; font-weight: bold; padding-left: 15px;">${sub.label}</td>
+                    <td>${classVal}</td>
+                    <td>${examVal}</td>
                     <td style="font-weight: bold;">${total}</td>
                     <td>${assessment.grade}</td>
                     <td>${assessment.remark}</td>
@@ -249,40 +313,30 @@
             `;
         });
 
-        const overallAverage = totalScoreSum / validSubjectsCount;
-        document.getElementById('r-average').innerText = overallAverage.toFixed(2) + "%";
+        const finalAverage = grandTotal / SUBJECT_COUNT;
+        document.getElementById('r-average').innerText = finalAverage.toFixed(2) + "%";
 
-        // Dynamic Conduct Generation Engine
-        let conduct = "";
-        if(overallAverage >= 70) conduct = "Exemplary. Displays excellent behavior and respect for rules.";
-        else if(overallAverage >= 55) conduct = "Good. Well-behaved and cooperates well with peers.";
-        else if(overallAverage >= 40) conduct = "Satisfactory. Behavior is generally good but can improve focus.";
-        else conduct = "Needs Improvement. Frequently distracted and needs strict supervision.";
+        // Dynamic Text Output Core Engines
+        let conduct = "Good. Displays obedience and cooperates fully with teachers.";
+        if(finalAverage >= 75) conduct = "Exemplary behavior. Sets a wonderful example for peers.";
+        else if(finalAverage < 50) conduct = "Satisfactory. Needs to eliminate distractions and build focus.";
 
-        // Dynamic Interest Generation Engine
-        let interest = "";
-        if(overallAverage >= 80) interest = "Reading, ICT research, and creative arts.";
-        else if(overallAverage >= 70) interest = "Athletics, computing, and group leadership tasks.";
-        else if(overallAverage >= 55) interest = "Practical science projects, football, and drawing.";
-        else if(overallAverage >= 45) interest = "Hands-on classroom projects and outdoor games.";
-        else interest = "Recreational play and cultural arts.";
+        let interest = "Sports, reading and hands-on environmental activities.";
+        if(finalAverage >= 80) interest = "Academic exploration, computing algorithms, and logic games.";
+        else if(finalAverage < 50) interest = "Practical arts and recreational teamwork games.";
 
-        // Dynamic Teacher Remarks Engine
-        let remarks = "";
-        if(overallAverage >= 80) remarks = "An excellent performance. Outstanding academic work, keep it up!";
-        else if(overallAverage >= 75) remarks = "Very good results. Shows great understanding and dedication.";
-        else if(overallAverage >= 70) remarks = "Good performance this term. Consistent effort will bring further progress.";
-        else if(overallAverage >= 60) remarks = "A satisfactory performance. There is room for improvement if you focus more.";
-        else if(overallAverage >= 50) remarks = "Average pass. Needs to double up their efforts in the weak areas.";
-        else if(overallAverage >= 40) remarks = "A weak performance. Needs steady guidance and serious attention to lessons.";
-        else remarks = "Poor results. Must focus completely on studies and attend remedial classes.";
+        let remarks = "A satisfactory progress. With determined effort, higher goals can be achieved.";
+        if(finalAverage >= 80) remarks = "An exceptional performance! Keep maintaining this brilliant standard.";
+        else if(finalAverage >= 70) remarks = "Very good terminal performance. Keep working hard.";
+        else if(finalAverage < 50) remarks = "Performance is weak. Regular remedial study is highly recommended.";
 
         document.getElementById('r-conduct').innerText = conduct;
         document.getElementById('r-interest').innerText = interest;
         document.getElementById('r-remarks').innerText = remarks;
 
-        document.getElementById('report-card-output').style.display = 'block';
-        document.getElementById('report-card-output').scrollIntoView({ behavior: 'smooth' });
+        const outputWindow = document.getElementById('report-card-output');
+        outputWindow.style.display = 'block';
+        outputWindow.scrollIntoView({ behavior: 'smooth' });
     }
 </script>
 
