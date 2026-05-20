@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automated Student Report Portal</title>
+    <style>
+        :root {
+            --primary-color: #1a1a1a;
+            --accent-color: #4f46e5;
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        /* Login Screen Styles */
+        #login-screen {
+            max-width: 400px;
+            margin: 100px auto;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        input[type="password"], input[type="text"], input[type="number"], select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0 20px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+        }
+        button:hover { opacity: 0.9; }
+        
+        /* Dashboard & Form Styles */
+        #portal-dashboard { display: none; }
+        .card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th { background-color: var(--primary-color); color: white; }
+        .score-input { width: 70px; text-align: center; margin: 0; padding: 5px; }
+
+        /* Report Card Print Layout */
+        #report-card-output {
+            display: none;
+            background: white;
+            padding: 40px;
+            border: 3px double #000;
+            margin-top: 30px;
+        }
+        .report-header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; }
+        
+        @media print {
+            body * { visibility: hidden; }
+            #report-card-output, #report-card-output * { visibility: visible; }
+            #report-card-output { position: absolute; left: 0; top: 0; width: 100%; border: none; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div id="login-screen">
+        <h2>School Portal Login</h2>
+        <p>Enter administrative password to access grading sheets.</p>
+        <input type="password" id="portal-password" placeholder="Enter Password">
+        <button onclick="checkPassword()">Login to Portal</button>
+        <p id="login-error" style="color: red; margin-top: 10px; display: none;">Invalid Password. Try again.</p>
+    </div>
+
+    <div id="portal-dashboard">
+        <div class="card">
+            <h2>Student Administration & Demographics</h2>
+            <div class="grid-2">
+                <div>
+                    <label>Student Full Name:</label>
+                    <input type="text" id="student-name" placeholder="e.g. King">
+                </div>
+                <div>
+                    <label>Class:</label>
+                    <input type="text" id="student-class" value="Basic 5">
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Academic Marks Entry (50% Class / 50% Exam)</h2>
+            <table id="marks-table">
+                <thead>
+                    <tr>
+                        <th>Subject</th>
+                        <th>Class Score (Max 50)</th>
+                        <th>Exam Score (Max 50)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>English Language</td><td><input type="number" class="score-input class-mark" max="50" min="0"></td><td><input type="number" class="score-input exam-mark" max="50" min="0"></td></tr>
+                    <tr><td>Mathematics</td><td><input type="number" class="score-input class-mark" max="50" min="0"></td><td><input type="number" class="score-input exam-mark" max="50" min="0"></td></tr>
+                    <tr><td>Integrated Science</td><td><input type="number" class="score-input class-mark" max="50" min="0"></td><td><input type="number" class="score-input exam-mark" max="50" min="0"></td></tr>
+                    <tr><td>R.M.E</td><td><input type="number" class="score-input class-mark" max="50" min="0"></td><td><input type="number" class="score-input exam-mark" max="50" min="0"></td></tr>
+                    <tr><td>Computing</td><td><input type="number" class="score-input class-mark" max="50" min="0"></td><td><input type="number" class="score-input exam-mark" max="50" min="0"></td></tr>
+                    <tr><td>History</td><td><input type="number" class="score-input class-mark" max="50" min="0"></td><td><input type="number" class="score-input exam-mark" max="50" min="0"></td></tr>
+                    <tr><td>Ghanaian Language</td><td><input type="number" class="score-input class-mark" max="50" min="0"></td><td><input type="number" class="score-input exam-mark" max="50" min="0"></td></tr>
+                    <tr><td>Creative Arts</td><td><input type="number" class="score-input class-mark" max="50" min="0"></td><td><input type="number" class="score-input exam-mark" max="50" min="0"></td></tr>
+                </tbody>
+            </table>
+            <br>
+            <button onclick="generateReport()">Calculate Scores & Generate Report</button>
+        </div>
+
+        <div id="report-card-output" class="card">
+            <div class="report-header">
+                <h1 style="margin: 0;">NKOWI R/C PRIMARY SCHOOL</h1>
+                <p style="margin: 5px 0; font-weight: bold; letter-spacing: 1px;">KNOWLEDGE IS POWER</p>
+                <p style="margin: 0;">P.O. BOX 8, KUNTANASE - ASHANTI REGION</p>
+            </div>
+            
+            <div style="margin: 20px 0; display: grid; grid-template-columns: 1fr 1fr; line-height: 1.8;">
+                <div><strong>STUDENT NAME:</strong> <span id="r-name"></span></div>
+                <div><strong>CLASS:</strong> <span id="r-class"></span></div>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Subject</th>
+                        <th>Class (50%)</th>
+                        <th>Exam (50%)</th>
+                        <th>Total (100%)</th>
+                        <th>Grade</th>
+                        <th>Remarks</th>
+                    </tr>
+                </thead>
+                <tbody id="report-table-body">
+                    </tbody>
+            </table>
+
+            <div style="margin-top: 20px; line-height: 2;">
+                <div><strong>OVERALL AVERAGE:</strong> <span id="r-average" style="font-weight: bold;"></span></div>
+                <hr>
+                <div><strong>CONDUCT:</strong> <span id="r-conduct"></span></div>
+                <div><strong>INTEREST:</strong> <span id="r-interest"></span></div>
+                <div style="margin-top: 10px; padding: 10px; border: 1px solid #ccc; background: #fafafa;">
+                    <strong>CLASS TEACHER'S REMARKS:</strong> <span id="r-remarks"></span>
+                </div>
+            </div>
+            <br>
+            <button onclick="window.print()" style="background-color: #10b981;">Print / Save Report Card as PDF</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // System Password Gate
+    function checkPassword() {
+        const pass = document.getElementById('portal-password').value;
+        if(pass === "Nkowi2026") { // Set your preferred teacher password here
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('portal-dashboard').style.display = 'block';
+        } else {
+            document.getElementById('login-error').style.display = 'block';
+        }
+    }
+
+    // GES Standard Grading Logic
+    function getGradeAndRemark(total) {
+        if(total >= 80) return { grade: 1, remark: "Excellent" };
+        if(total >= 75) return { grade: 2, remark: "Very Good" };
+        if(total >= 70) return { grade: 3, remark: "Good" };
+        if(total >= 65) return { grade: 4, remark: "High Average" };
+        if(total >= 60) return { grade: 5, remark: "Average" };
+        if(total >= 55) return { grade: 6, remark: "Low Average" };
+        if(total >= 50) return { grade: 7, remark: "Credit" };
+        if(total >= 40) return { grade: 8, remark: "Pass" };
+        return { grade: 9, remark: "Fail" };
+    }
+
+    function generateReport() {
+        const name = document.getElementById('student-name').value || "N/A";
+        const sClass = document.getElementById('student-class').value || "N/A";
+        
+        document.getElementById('r-name').innerText = name.toUpperCase();
+        document.getElementById('r-class').innerText = sClass.toUpperCase();
+
+        const tableRows = document.querySelectorAll('#marks-table tbody tr');
+        const reportBody = document.getElementById('report-table-body');
+        reportBody.innerHTML = '';
+
+        let totalScoreSum = 0;
+        let validSubjectsCount = 0;
+
+        tableRows.forEach(row => {
+            const subjectName = row.cells[0].innerText;
+            const classMark = parseFloat(row.querySelector('.class-mark').value) || 0;
+            const examMark = parseFloat(row.querySelector('.exam-mark').value) || 0;
+            const total = classMark + examMark;
+
+            totalScoreSum += total;
+            validSubjectsCount++;
+
+            const assessment = getGradeAndRemark(total);
+
+            reportBody.innerHTML += `
+                <tr>
+                    <td style="text-align: left; font-weight: bold;">${subjectName}</td>
+                    <td>${classMark}</td>
+                    <td>${examMark}</td>
+                    <td style="font-weight: bold;">${total}</td>
+                    <td>${assessment.grade}</td>
+                    <td>${assessment.remark}</td>
+                </tr>
+            `;
+        });
+
+        const overallAverage = totalScoreSum / validSubjectsCount;
+        document.getElementById('r-average').innerText = overallAverage.toFixed(2) + "%";
+
+        // Dynamic Conduct Generation Engine
+        let conduct = "";
+        if(overallAverage >= 70) conduct = "Exemplary. Displays excellent behavior and respect for rules.";
+        else if(overallAverage >= 55) conduct = "Good. Well-behaved and cooperates well with peers.";
+        else if(overallAverage >= 40) conduct = "Satisfactory. Behavior is generally good but can improve focus.";
+        else conduct = "Needs Improvement. Frequently distracted and needs strict supervision.";
+
+        // Dynamic Interest Generation Engine
+        let interest = "";
+        if(overallAverage >= 80) interest = "Reading, ICT research, and creative arts.";
+        else if(overallAverage >= 70) interest = "Athletics, computing, and group leadership tasks.";
+        else if(overallAverage >= 55) interest = "Practical science projects, football, and drawing.";
+        else if(overallAverage >= 45) interest = "Hands-on classroom projects and outdoor games.";
+        else interest = "Recreational play and cultural arts.";
+
+        // Dynamic Teacher Remarks Engine
+        let remarks = "";
+        if(overallAverage >= 80) remarks = "An excellent performance. Outstanding academic work, keep it up!";
+        else if(overallAverage >= 75) remarks = "Very good results. Shows great understanding and dedication.";
+        else if(overallAverage >= 70) remarks = "Good performance this term. Consistent effort will bring further progress.";
+        else if(overallAverage >= 60) remarks = "A satisfactory performance. There is room for improvement if you focus more.";
+        else if(overallAverage >= 50) remarks = "Average pass. Needs to double up their efforts in the weak areas.";
+        else if(overallAverage >= 40) remarks = "A weak performance. Needs steady guidance and serious attention to lessons.";
+        else remarks = "Poor results. Must focus completely on studies and attend remedial classes.";
+
+        document.getElementById('r-conduct').innerText = conduct;
+        document.getElementById('r-interest').innerText = interest;
+        document.getElementById('r-remarks').innerText = remarks;
+
+        document.getElementById('report-card-output').style.display = 'block';
+        document.getElementById('report-card-output').scrollIntoView({ behavior: 'smooth' });
+    }
+</script>
+
+</body>
+</html>
