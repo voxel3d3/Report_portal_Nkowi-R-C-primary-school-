@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NKOWI BASIC SCHOOL - Master SBA & Ranking Suite</title>
+    <title>NKOWI BASIC SCHOOL - Multi-Class Live Cloud Suite</title>
     <style>
         :root {
             --primary-color: #0f172a;
@@ -31,13 +31,14 @@
             text-align: center;
             border: 1px solid var(--border-color);
         }
-        input[type="password"], input[type="text"], input[type="number"] {
+        input[type="password"], input[type="text"], input[type="number"], select {
             width: 100%;
-            padding: 8px;
+            padding: 10px;
             margin: 8px 0 15px 0;
             border: 1px solid var(--border-color);
             border-radius: 4px;
             box-sizing: border-box;
+            font-size: 14px;
         }
         button {
             background-color: var(--accent-color);
@@ -47,6 +48,7 @@
             border-radius: 4px;
             cursor: pointer;
             font-weight: bold;
+            width: 100%;
         }
         button:hover { opacity: 0.9; }
         
@@ -84,11 +86,11 @@
         .calc-grand { font-weight: bold; background: #eff6ff; color: #1e40af; }
         .calc-pos { font-weight: bold; background: #faf5ff; color: #6b21a8; font-size: 11px; }
         
-        /* Master Summary Columns Formatting */
         .calc-master-tot { font-weight: bold; background: #fee2e2; color: #991b1b; font-size: 13px; }
         .calc-master-pos { font-weight: bold; background: #fef3c7; color: #92400e; font-size: 14px; }
         
-        .action-btn { background: #10b981; padding: 6px 12px; font-size: 12px; border-radius: 4px; }
+        .action-btn { background: #10b981; padding: 6px 12px; font-size: 12px; border-radius: 4px; color: white;}
+        .syncing-badge { background: #10b981; color: white; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; }
 
         #report-card-output {
             display: none;
@@ -114,6 +116,27 @@
             .print-btn { display: none; }
         }
     </style>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, set, onValue, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "PASTE_YOUR_API_KEY_HERE",
+            databaseURL: "PASTE_YOUR_DATABASE_URL_HERE",
+            projectId: "nkowi-sba-portal",
+            storageBucket: "nkowi-sba-portal.appspot.com"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        window.db = db;
+        window.dbRef = ref;
+        window.dbSet = set;
+        window.dbUpdate = update;
+        window.dbOnValue = onValue;
+    </script>
 </head>
 <body>
 
@@ -121,22 +144,35 @@
 
     <div id="login-screen">
         <h2>NKOWI BASIC SCHOOL</h2>
-        <p>10-Column Portal (Subject & Master Ranking Engine)</p>
-        <input type="password" id="portal-password" placeholder="Enter System Password">
-        <button onclick="checkPassword()">Open Sheet Matrix</button>
+        <p>Live Multi-Class Portal Panel</p>
+        
+        <label style="text-align: left; display: block; font-weight: bold; margin-bottom: 2px;">Select Your Class:</label>
+        <select id="portal-class">
+            <option value="basic1">Basic 1</option>
+            <option value="basic2">Basic 2</option>
+            <option value="basic3">Basic 3</option>
+            <option value="basic4">Basic 4</option>
+            <option value="basic5" selected>Basic 5</option>
+            <option value="basic6">Basic 6</option>
+        </select>
+
+        <label style="text-align: left; display: block; font-weight: bold; margin-bottom: 2px;">System Password:</label>
+        <input type="password" id="portal-password" placeholder="Enter Password">
+        
+        <button onclick="checkPassword()">Connect Class Matrix</button>
         <p id="login-error" style="color: red; margin-top: 10px; display: none;">Invalid Password.</p>
     </div>
 
     <div id="portal-dashboard">
         <div class="header-banner">
-            <h1 style="margin: 0; font-size: 24px;">NKOWI BASIC SCHOOL - COMPREHENSIVE TERMINAL SPREADSHEET</h1>
-            <p style="margin: 5px 0 0 0; opacity: 0.9;">Continuous Assessment System with Automatic Subject & Over-all Class Ranking</p>
+            <h1 style="margin: 0; font-size: 24px;">NKOWI BASIC SCHOOL - <span id="display-class-title" style="text-transform: uppercase; color: #f59e0b;"></span> MATRIX <span class="syncing-badge">● Live Cloud Active</span></h1>
+            <p style="margin: 5px 0 0 0; opacity: 0.9;">Data is isolated to this class folder. Changes save live automatically.</p>
         </div>
 
         <div class="sba-card">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <h3 style="margin: 0; font-size: 16px; color: #475569;">← Scroll horizontally to see final totals and overall positions at the far right edge →</h3>
-                <button onclick="addNewRow()" style="background-color: var(--accent-color); padding: 10px 20px;">+ Add New Student Row</button>
+                <h3 style="margin: 0; font-size: 16px; color: #475569;">← Horizontal scroll enabled to view summary positions columns at the far right edge →</h3>
+                <button onclick="createNewStudentInCloud()" style="background-color: var(--accent-color); padding: 10px 20px; width: auto;">+ Add New Student Row</button>
             </div>
             
             <div class="table-wrapper">
@@ -156,7 +192,6 @@
                             <th colspan="10" class="subject-header" style="background-color:#3f6212 !important;">Creative Arts</th>
                             
                             <th colspan="2" class="summary-header">Terminal Summary</th>
-                            
                             <th rowspan="2" style="background: #0f172a;">Action</th>
                         </tr>
                         <tr>
@@ -173,8 +208,7 @@
                             <th style="background: #fef3c7; color: #92400e; font-weight: bold;">OVERALL POS</th>
                         </tr>
                     </thead>
-                    <tbody id="sba-rows">
-                        </tbody>
+                    <tbody id="sba-rows"></tbody>
                 </table>
             </div>
         </div>
@@ -188,7 +222,7 @@
             
             <div class="report-info-grid">
                 <div><strong>NAME OF STUDENT:</strong> <span id="r-name"></span></div>
-                <div><strong>CLASS:</strong> BASIC 5</div>
+                <div><strong>CLASS:</strong> <span id="r-class-name" style="text-transform: uppercase;"></span></div>
                 <div><strong>ACADEMIC YEAR:</strong> 2025/2026</div>
                 <div><strong>TERM:</strong> THIRD TERM</div>
             </div>
@@ -205,8 +239,7 @@
                         <th>REMARKS</th>
                     </tr>
                 </thead>
-                <tbody id="report-table-body">
-                    </tbody>
+                <tbody id="report-table-body"></tbody>
             </table>
 
             <div style="margin-top: 25px; line-height: 1.8; font-size: 14px;">
@@ -221,7 +254,6 @@
                     <strong>CLASS TEACHER'S REMARKS:</strong> <span id="r-remarks"></span>
                 </div>
             </div>
-            
             <button class="print-btn" onclick="window.print()">Print Report Card</button>
         </div>
     </div>
@@ -229,81 +261,101 @@
 
 <script>
     const ALL_SUBJECTS = ['eng', 'math', 'sci', 'rme', 'gha', 'his', 'comp', 'crt'];
-    let totalActiveRows = 0;
+    let SelectedClassPath = "basic5"; 
 
     function checkPassword() {
         const inputPass = document.getElementById('portal-password').value;
+        SelectedClassPath = document.getElementById('portal-class').value;
+        
         if(inputPass === "Nkowi2026") {
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('portal-dashboard').style.display = 'block';
-            addNewRow(); addNewRow(); addNewRow(); addNewRow();
+            
+            // Format nice title display text (e.g. basic5 -> Basic 5)
+            document.getElementById('display-class-title').innerText = SelectedClassPath.replace("basic", "Basic ");
+
+            // Connect listener specifically to the chosen class folder node inside Firebase
+            setTimeout(() => {
+                window.dbOnValue(window.dbRef(window.db, "classes/" + SelectedClassPath), (snapshot) => {
+                    const data = snapshot.val();
+                    renderTableFromCloudData(data);
+                });
+            }, 1000);
+
         } else {
             document.getElementById('login-error').style.display = 'block';
         }
     }
 
-    function addNewRow() {
-        totalActiveRows++;
-        const targetBody = document.getElementById('sba-rows');
-        const rowNode = document.createElement('tr');
-        rowNode.id = `sba-row-${totalActiveRows}`;
-        rowNode.className = "student-data-row";
-        rowNode.setAttribute("data-row-id", totalActiveRows);
-        
-        let subCellsHTML = '';
+    function createNewStudentInCloud() {
+        const nextId = document.querySelectorAll(".student-data-row").length + 1;
+        let initialData = { name: "" };
         ALL_SUBJECTS.forEach(sub => {
-            subCellsHTML += `
-                <td><input type="number" class="input-mark ${sub}-exercise" max="15" value="0" oninput="runRowCalculations(${totalActiveRows})"></td>
-                <td><input type="number" class="input-mark ${sub}-test" max="15" value="0" oninput="runRowCalculations(${totalActiveRows})"></td>
-                <td><input type="number" class="input-mark ${sub}-group" max="15" value="0" oninput="runRowCalculations(${totalActiveRows})"></td>
-                <td><input type="number" class="input-mark ${sub}-project" max="15" value="0" oninput="runRowCalculations(${totalActiveRows})"></td>
-                
-                <td id="${sub}-tot60-${totalActiveRows}" class="calc-total">0</td>
-                <td id="${sub}-sba50-${totalActiveRows}" class="calc-weight">0</td>
-                <td><input type="number" class="input-mark ${sub}-exm" max="100" value="0" oninput="runRowCalculations(${totalActiveRows})"></td>
-                <td id="${sub}-ex50-${totalActiveRows}" class="calc-ex-weight">0</td>
-                <td id="${sub}-tot100-${totalActiveRows}" class="calc-grand">0</td>
-                <td id="${sub}-pos-${totalActiveRows}" class="calc-pos">-</td>
-            `;
+            initialData[`${sub}_exe`] = 0; initialData[`${sub}_tst`] = 0;
+            initialData[`${sub}_grp`] = 0; initialData[`${sub}_prj`] = 0;
+            initialData[`${sub}_exm`] = 0;
         });
 
-        rowNode.innerHTML = `
-            <td>${totalActiveRows}</td>
-            <td style="position: sticky; left: 0; background: #fff; z-index: 5; box-shadow: 2px 0 5px rgba(0,0,0,0.05);">
-                <input type="text" class="input-name" placeholder="Full Name">
-            </td>
-            ${subCellsHTML}
-            
-            <td id="master-total-${totalActiveRows}" class="calc-master-tot">0</td>
-            <td id="master-position-${totalActiveRows}" class="calc-master-pos">-</td>
-            
-            <td><button class="action-btn" onclick="buildReportCardWindow(${totalActiveRows})">Report</button></td>
-        `;
-        targetBody.appendChild(rowNode);
+        window.dbSet(window.dbRef(window.db, `classes/${SelectedClassPath}/row_${nextId}`), initialData);
     }
 
-    function getRankSuffix(rankNum) {
-        let suffix = "th";
-        if (rankNum === 1) suffix = "st";
-        if (rankNum === 2) suffix = "nd";
-        if (rankNum === 3) suffix = "rd";
-        return rankNum + suffix;
+    function renderTableFromCloudData(cloudObj) {
+        const targetBody = document.getElementById('sba-rows');
+        targetBody.innerHTML = '';
+        if(!cloudObj) return;
+
+        Object.keys(cloudObj).forEach(rowKey => {
+            const rId = rowKey.replace("row_", "");
+            const sData = cloudObj[rowKey];
+
+            const rowNode = document.createElement('tr');
+            rowNode.id = `sba-row-${rId}`;
+            rowNode.className = "student-data-row";
+            rowNode.setAttribute("data-row-id", rId);
+
+            let subCellsHTML = '';
+            ALL_SUBJECTS.forEach(sub => {
+                subCellsHTML += `
+                    <td><input type="number" class="input-mark ${sub}-exercise" max="15" value="${sData[sub+'_exe'] || 0}" onchange="syncFieldToCloud(${rId}, '${sub}_exe', this.value)"></td>
+                    <td><input type="number" class="input-mark ${sub}-test" max="15" value="${sData[sub+'_tst'] || 0}" onchange="syncFieldToCloud(${rId}, '${sub}_tst', this.value)"></td>
+                    <td><input type="number" class="input-mark ${sub}-group" max="15" value="${sData[sub+'_grp'] || 0}" onchange="syncFieldToCloud(${rId}, '${sub}_grp', this.value)"></td>
+                    <td><input type="number" class="input-mark ${sub}-project" max="15" value="${sData[sub+'_prj'] || 0}" onchange="syncFieldToCloud(${rId}, '${sub}_prj', this.value)"></td>
+                    
+                    <td id="${sub}-tot60-${rId}" class="calc-total">0</td>
+                    <td id="${sub}-sba50-${rId}" class="calc-weight">0</td>
+                    <td><input type="number" class="input-mark ${sub}-exm" max="100" value="${sData[sub+'_exm'] || 0}" onchange="syncFieldToCloud(${rId}, '${sub}_exm', this.value)"></td>
+                    <td id="${sub}-ex50-${rId}" class="calc-ex-weight">0</td>
+                    <td id="${sub}-tot100-${rId}" class="calc-grand">0</td>
+                    <td id="${sub}-pos-${rId}" class="calc-pos">-</td>
+                `;
+            });
+
+            rowNode.innerHTML = `
+                <td>${rId}</td>
+                <td style="position: sticky; left: 0; background: #fff; z-index: 5; box-shadow: 2px 0 5px rgba(0,0,0,0.05);">
+                    <input type="text" class="input-name" value="${sData.name || ''}" onchange="syncFieldToCloud(${rId}, 'name', this.value)" placeholder="Full Name">
+                </td>
+                ${subCellsHTML}
+                <td id="master-total-${rId}" class="calc-master-tot">0</td>
+                <td id="master-position-${rId}" class="calc-master-pos">-</td>
+                <td><button class="action-btn" onclick="buildReportCardWindow(${rId})">Report</button></td>
+            `;
+            targetBody.appendChild(rowNode);
+            runRowLocalCalculations(rId);
+        });
+
+        recalculateAllSpreadsheetPositions();
     }
 
-    function computeGESMatrix(totalScore) {
-        if(totalScore >= 80) return { gr: 1, rem: "Excellent" };
-        if(totalScore >= 75) return { gr: 2, rem: "Very Good" };
-        if(totalScore >= 70) return { gr: 3, rem: "Good" };
-        if(totalScore >= 65) return { gr: 4, rem: "High Average" };
-        if(totalScore >= 60) return { gr: 5, rem: "Average" };
-        if(totalScore >= 55) return { gr: 6, rem: "Low Average" };
-        if(totalScore >= 50) return { gr: 7, rem: "Credit" };
-        if(totalScore >= 40) return { gr: 8, rem: "Pass" };
-        return { gr: 9, rem: "Fail" };
+    function syncFieldToCloud(rowId, fieldName, value) {
+        let updatePack = {};
+        updatePack[fieldName] = (fieldName === 'name') ? value : (parseFloat(value) || 0);
+        window.dbUpdate(window.dbRef(window.db, `classes/${SelectedClassPath}/row_${rowId}`), updatePack);
     }
 
-    function runRowCalculations(rowNum) {
+    function runRowLocalCalculations(rowNum) {
         const contextRow = document.getElementById(`sba-row-${rowNum}`);
+        if(!contextRow) return;
         let calculatedMasterSum = 0;
         
         ALL_SUBJECTS.forEach(sub => {
@@ -326,17 +378,13 @@
             document.getElementById(`${sub}-tot100-${rowNum}`).innerText = grandTotal;
         });
 
-        // Write the aggregate master sum directly to the end tracking field
         document.getElementById(`master-total-${rowNum}`).innerText = calculatedMasterSum;
-
-        // Instantly sweep row arrays to update both internal columns and terminal master positions
-        recalculateAllSpreadsheetPositions();
     }
 
     function recalculateAllSpreadsheetPositions() {
         const allRows = document.querySelectorAll(".student-data-row");
+        if(allRows.length === 0) return;
         
-        // 1. COMPUTE SUBJECT LEVEL POSITIONS
         ALL_SUBJECTS.forEach(sub => {
             let scoreList = [];
             allRows.forEach(row => {
@@ -346,21 +394,13 @@
             });
 
             scoreList.sort((a, b) => b.score - a.score);
-
             let currentRank = 1;
             for (let i = 0; i < scoreList.length; i++) {
-                if (i > 0 && scoreList[i].score < scoreList[i - 1].score) {
-                    currentRank = i + 1;
-                }
-                if(scoreList[i].score === 0) {
-                     document.getElementById(`${sub}-pos-${scoreList[i].id}`).innerText = "-";
-                } else {
-                     document.getElementById(`${sub}-pos-${scoreList[i].id}`).innerText = getRankSuffix(currentRank);
-                }
+                if (i > 0 && scoreList[i].score < scoreList[i - 1].score) currentRank = i + 1;
+                document.getElementById(`${sub}-pos-${scoreList[i].id}`).innerText = (scoreList[i].score === 0) ? "-" : getRankSuffix(currentRank);
             }
         });
 
-        // 2. COMPUTE CLASS LEVEL OVERALL TERMINAL POSITIONS
         let masterSummaryList = [];
         allRows.forEach(row => {
             const rId = row.getAttribute("data-row-id");
@@ -369,25 +409,38 @@
         });
 
         masterSummaryList.sort((a, b) => b.aggregate - a.aggregate);
-
         let overallRank = 1;
         for (let j = 0; j < masterSummaryList.length; j++) {
-            if (j > 0 && masterSummaryList[j].aggregate < masterSummaryList[j - 1].aggregate) {
-                overallRank = j + 1;
-            }
-            if(masterSummaryList[j].aggregate === 0) {
-                document.getElementById(`master-position-${masterSummaryList[j].id}`).innerText = "-";
-            } else {
-                document.getElementById(`master-position-${masterSummaryList[j].id}`).innerText = getRankSuffix(overallRank);
-            }
+            if (j > 0 && masterSummaryList[j].aggregate < masterSummaryList[j - 1].aggregate) overallRank = j + 1;
+            document.getElementById(`master-position-${masterSummaryList[j].id}`).innerText = (masterSummaryList[j].aggregate === 0) ? "-" : getRankSuffix(overallRank);
         }
+    }
+
+    function getRankSuffix(rankNum) {
+        let suffix = "th";
+        if (rankNum === 1) suffix = "st";
+        if (rankNum === 2) suffix = "nd";
+        if (rankNum === 3) suffix = "rd";
+        return rankNum + suffix;
+    }
+
+    function computeGESMatrix(totalScore) {
+        if(totalScore >= 80) return { gr: 1, rem: "Excellent" };
+        if(totalScore >= 75) return { gr: 2, rem: "Very Good" };
+        if(totalScore >= 70) return { gr: 3, rem: "Good" };
+        if(totalScore >= 65) return { gr: 4, rem: "High Average" };
+        if(totalScore >= 60) return { gr: 5, rem: "Average" };
+        if(totalScore >= 55) return { gr: 6, rem: "Low Average" };
+        if(totalScore >= 50) return { gr: 7, rem: "Credit" };
+        if(totalScore >= 40) return { gr: 8, rem: "Pass" };
+        return { gr: 9, rem: "Fail" };
     }
 
     function buildReportCardWindow(rowNum) {
         const contextRow = document.getElementById(`sba-row-${rowNum}`);
         const studentRawName = contextRow.querySelector('.input-name').value || "STUDENT RECORD ENTRY";
-        
         document.getElementById('r-name').innerText = studentRawName.toUpperCase();
+        document.getElementById('r-class-name').innerText = SelectedClassPath.replace("basic", "Basic ");
         
         const labelsMap = {
             'eng': 'ENGLISH LANGUAGE', 'math': 'MATHEMATICS', 'sci': 'INTEGRATED SCIENCE',
@@ -397,10 +450,8 @@
 
         const targetTableBody = document.getElementById('report-table-body');
         targetTableBody.innerHTML = '';
-        
         const printedMasterTotal = document.getElementById(`master-total-${rowNum}`).innerText;
         const printedMasterPosition = document.getElementById(`master-position-${rowNum}`).innerText;
-        
         let dynamicSum = 0;
 
         ALL_SUBJECTS.forEach(sub => {
@@ -409,7 +460,6 @@
             const computedTotal = finalSba + finalExamWeight;
             const positionText = document.getElementById(`${sub}-pos-${rowNum}`).innerText;
             dynamicSum += computedTotal;
-
             const assessment = computeGESMatrix(computedTotal);
 
             targetTableBody.innerHTML += `
@@ -426,8 +476,6 @@
         });
 
         const generalMean = dynamicSum / ALL_SUBJECTS.length;
-        
-        // Link terminal data elements to report display profile overlays
         document.getElementById('r-class-total').innerText = printedMasterTotal;
         document.getElementById('r-class-position').innerText = printedMasterPosition;
         document.getElementById('r-average').innerText = generalMean.toFixed(2) + "%";
@@ -456,6 +504,5 @@
         reportSection.scrollIntoView({ behavior: 'smooth' });
     }
 </script>
-
 </body>
 </html>
