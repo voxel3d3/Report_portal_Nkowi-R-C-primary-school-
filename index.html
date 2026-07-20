@@ -136,18 +136,37 @@
         left: 0;
         top: 0;
 
-        width: 194mm;
-        min-height: 281mm;
+        width: 100%;
+        min-height: auto;
 
         padding: 5mm;
         margin: 0;
 
         border: none;
 
-        transform: scale(0.80);
-        transform-origin: top left;
+        transform: none;
 
         page-break-inside: avoid;
+    }
+
+
+    /* Make report fit better on A4 */
+    #report-card-output table {
+        width: 100%;
+        font-size: 11px;
+    }
+
+    #report-card-output td,
+    #report-card-output th {
+        padding: 4px;
+    }
+
+    #report-card-output h1 {
+        font-size: 22px;
+    }
+
+    #report-card-output p {
+        margin: 3px 0;
     }
 
 
@@ -158,7 +177,7 @@
 
 
     .print-btn {
-        display:none;
+        display: none;
     }
 }
     </style>
