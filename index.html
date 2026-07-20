@@ -243,11 +243,40 @@
             </table>
 
             <div style="margin-top: 25px; line-height: 1.8; font-size: 14px;">
-                <div style="display: flex; gap: 40px;">
-                    <div><strong>CLASS TOTAL:</strong> <span id="r-class-total" style="font-weight: bold; text-decoration: underline;"></span> / 800</div>
-                    <div><strong>OVERALL POSITION:</strong> <span id="r-class-position" style="font-weight: bold; text-decoration: underline; color: #b45309;"></span></div>
-                    <div><strong>OVERALL AVERAGE:</strong> <span id="r-average" style="font-weight: bold; text-decoration: underline;"></span></div>
-                </div>
+                <div style="display:flex; flex-wrap:wrap; gap:30px;">
+
+    <div>
+        <strong>CLASS TOTAL:</strong>
+        <span id="r-class-total" style="font-weight:bold; text-decoration:underline;"></span> / 800
+    </div>
+
+    <div>
+        <strong>OVERALL POSITION:</strong>
+        <span id="r-class-position" style="font-weight:bold; text-decoration:underline; color:#b45309;"></span>
+    </div>
+
+    <div>
+        <strong>OVERALL AVERAGE:</strong>
+        <span id="r-average" style="font-weight:bold; text-decoration:underline;"></span>
+    </div>
+
+    <div>
+        <strong>DAYS ATTENDED:</strong>
+
+        <input
+            id="attendance"
+            type="number"
+            style="width:55px; border:none; border-bottom:1px solid black; text-align:center;">
+
+        out of
+
+        <input
+            id="schoolDays"
+            type="number"
+            style="width:55px; border:none; border-bottom:1px solid black; text-align:center;">
+    </div>
+
+</div>
                 <div style="margin-top: 12px;"><strong>CONDUCT:</strong> <span id="r-conduct"></span></div>
                 <div><strong>INTEREST:</strong> <span id="r-interest"></span></div>
                 <div style="margin-top: 15px; padding: 15px; border: 1px solid #000; background: #f8fafc;">
