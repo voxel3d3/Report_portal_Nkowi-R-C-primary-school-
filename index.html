@@ -105,7 +105,12 @@
         .report-header h1 { margin: 0; font-size: 28px; font-family: 'Times New Roman', Times, serif; }
         .report-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; font-size: 14px; }
         .print-preview-table { min-width: 100%; }
-        .print-preview-table th { background: #000; color: #fff; padding: 8px; }
+        .print-preview-table th { 
+    background: #000 !important; 
+    color: #fff !important; 
+    padding: 8px; 
+    position: static !important;
+}
         .print-preview-table td { padding: 8px; border: 1px solid #000; }
         .print-btn { background: #dc2626; width: 100%; padding: 15px; font-size: 16px; margin-top: 20px; }
 
@@ -119,6 +124,8 @@
     html, body {
         width: 210mm;
         height: 297mm;
+        margin: 0;
+        padding: 0;
     }
 
     body * {
@@ -130,15 +137,16 @@
         visibility: visible;
     }
 
+
     #report-card-output {
+
         position: absolute;
         left: 0;
         top: 0;
 
-        width: 100%;
-        min-height: auto;
+        width: 194mm;
 
-        padding: 3mm;
+        padding: 0;
         margin: 0;
 
         border: none;
@@ -149,53 +157,75 @@
     }
 
 
-    /* REPORT TABLE SETTINGS */
+    /* FIX TABLE HEADER POSITION */
     #report-card-output table {
+
         width: 100%;
-        font-size: 10px;
         border-collapse: collapse;
-        page-break-inside: auto;
+        table-layout: fixed;
+
+        page-break-inside: avoid;
     }
 
 
-    #report-card-output thead {
-        display: table-header-group;
+    #report-card-output th {
+
+        position: static !important;
+        top: auto !important;
+
+        background: black !important;
+        color: white !important;
+
+        padding: 4px;
+
+        font-size: 10px;
+    }
+
+
+    #report-card-output td {
+
+        padding: 4px;
+        font-size: 10px;
     }
 
 
     #report-card-output tr {
+
         page-break-inside: avoid;
-        page-break-after: auto;
     }
 
 
-    #report-card-output td,
-    #report-card-output th {
-        padding: 3px;
+    #report-card-output .report-header {
+
+        page-break-after: avoid;
+    }
+
+
+    #report-card-output .report-info-grid {
+
+        margin-top: 10px;
+        margin-bottom: 10px;
+        gap: 10px;
     }
 
 
     #report-card-output h1 {
+
         font-size: 22px;
     }
 
 
     #report-card-output p {
+
         margin: 3px 0;
     }
 
 
-    /* Prevent remarks/signature boxes from splitting */
-    #report-card-output .report-header,
-    #report-card-output .report-info-grid,
-    #report-card-output > div:last-child {
-        page-break-inside: avoid;
-    }
-
-
     .print-btn {
-        display: none;
+
+        display:none !important;
     }
+
 }
     </style>
 
