@@ -131,35 +131,34 @@
     }
 
     #report-card-output {
+    position: absolute;
+    left: 0;
+    top: 0;
 
-        position: absolute;
-        left: 0;
-        top: 0;
+    width: 95%;
+    min-height: auto;
 
-        width: 100%;
-        min-height: auto;
+    padding: 3mm;
+    margin: 0;
 
-        padding: 5mm;
-        margin: 0;
+    border: none;
 
-        border: none;
+    transform: none;
 
-        transform: none;
-
-        page-break-inside: avoid;
-    }
+    page-break-inside: avoid;
+}
 
 
     /* Make report fit better on A4 */
-    #report-card-output table {
-        width: 100%;
-        font-size: 11px;
-    }
+   #report-card-output table {
+    width: 98%;
+    font-size: 10px;
+}
 
     #report-card-output td,
-    #report-card-output th {
-        padding: 4px;
-    }
+#report-card-output th {
+    padding: 3px;
+}
 
     #report-card-output h1 {
         font-size: 22px;
