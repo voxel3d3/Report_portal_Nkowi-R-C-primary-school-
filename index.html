@@ -277,11 +277,34 @@
     </div>
 
 </div>
+
+<div>
+    <strong>NUMBER ON ROLL:</strong>
+    <span id="r-roll" style="font-weight:bold; text-decoration:underline;"></span>
+</div>
+
                 <div style="margin-top: 12px;"><strong>CONDUCT:</strong> <span id="r-conduct"></span></div>
                 <div><strong>INTEREST:</strong> <span id="r-interest"></span></div>
                 <div style="margin-top: 15px; padding: 15px; border: 1px solid #000; background: #f8fafc;">
                     <strong>CLASS TEACHER'S REMARKS:</strong> <span id="r-remarks"></span>
                 </div>
+
+<div style="margin-top: 20px; padding: 15px; border: 1px solid #000;">
+    <strong>HEADMASTER'S REMARKS:</strong>
+    <p id="r-headmaster-remarks" style="margin: 10px 0;"></p>
+
+    <div style="margin-top: 40px; display:flex; justify-content:space-between;">
+        <div>
+            ___________________________<br>
+            <strong>HEADMASTER'S SIGNATURE</strong>
+        </div>
+
+        <div>
+            DATE: ___________________
+        </div>
+    </div>
+</div>
+
             </div>
             <button class="print-btn" onclick="window.print()">Print Report Card</button>
         </div>
@@ -508,6 +531,9 @@
         document.getElementById('r-class-total').innerText = printedMasterTotal;
         document.getElementById('r-class-position').innerText = printedMasterPosition;
         document.getElementById('r-average').innerText = generalMean.toFixed(2) + "%";
+
+const numberOnRoll = document.querySelectorAll(".student-data-row").length;
+document.getElementById("r-roll").innerText = numberOnRoll;
 
         let behavior = "Polite, obedient, and relates exceptionally well with peers.";
         let hobbyFocus = "Shows profound interest in technology exploration and leadership activities.";
