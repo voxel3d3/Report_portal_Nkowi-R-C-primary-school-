@@ -285,6 +285,16 @@
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                 <h3 style="margin: 0; font-size: 16px; color: #475569;">← Horizontal scroll enabled to view summary positions columns at the far right edge →</h3>
                 <button onclick="createNewStudentInCloud()" style="background-color: var(--accent-color); padding: 10px 20px; width: auto;">+ Add New Student Row</button>
+
+<button
+    onclick="saveAuditPDF()"
+    style="background:#dc2626;
+           padding:10px 20px;
+           width:auto;
+           margin-left:10px;">
+    💾 Save Audit PDF
+</button>
+
             </div>
             
             <div class="table-wrapper">
@@ -670,6 +680,88 @@ document.getElementById("r-roll").innerText = numberOnRoll;
         reportSection.style.display = 'block';
         reportSection.scrollIntoView({ behavior: 'smooth' });
     }
+
 </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 </body>
-</html>
+</async function saveAuditPDF() {
+
+    const { jsPDF } = window.jspdf;
+
+    // Capture the entire dashboard
+    const target = document.getElementById("portal-dashboard");
+
+    // Create high-quality screenshot
+    const canvas = await html2canvas(target, {
+        scale: 2,
+        useCORS: true,
+        scrollX: 0,
+        scrollY: 0,
+        windowWidth: document.body.scrollWidth,
+        windowHeight: document.body.scrollHeight
+    });
+
+    const imgData = canvas.toDataURL("image/png");
+
+    // Create landscape A3 PDF
+    const pdf = new jsPDF({
+        orientation: "landscape",
+        unit: "mm",
+        format: "a3"
+    });
+
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+
+    const imgWidth = pageWidth;
+    const imgHeight = canvas.height * imgWidth / canvas.width;
+
+    let heightLeft = imgHeight;
+    let position = 0;
+
+    pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+
+    heightLeft -= pageHeight;
+
+    while (heightLeft > 0) {
+
+        position = heightLeft - imgHeight;
+
+        pdf.addPage();
+
+        pdf.addImage(
+            imgData,
+            "PNG",
+            0,
+            position,
+            imgWidth,
+            imgHeight
+        );
+
+        heightLeft -= pageHeight;
+    }
+
+    const today = new Date();
+
+    const fileName =
+        "Audit_" +
+        SelectedClassPath +
+        "_" +
+        today.getFullYear() +
+        "-" +
+        (today.getMonth()+1) +
+        "-" +
+        today.getDate() +
+        "_" +
+        today.getHours() +
+        "-" +
+        today.getMinutes() +
+        ".pdf";
+
+    pdf.save(fileName);
+
+} html>
